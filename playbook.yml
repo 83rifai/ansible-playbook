@@ -130,12 +130,20 @@
   tasks:
   # PrestaShop Configuration
     - name: Download and unpack latest PrestaShop
+      get_url:
+        url: https://download.prestashop.com/download/releases/prestashop_1.7.4.2.zip
+        dest: "/var/www/{{ http_host }}"
+        #remote_src: yes
+        #creates: "/var/www/{{ http_host }}/prestashop"
+      tags: [ prestashop ]
+    
+    - name: Download and unpack latest Prestashop
       unarchive:
-        src: https://download.prestashop.com/download/releases/prestashop_1.7.4.2.zip
+        src: "/var/www/{{ http_host }}/prestashop_1.7.4.2.zip"
         dest: "/var/www/{{ http_host }}"
         remote_src: yes
         creates: "/var/www/{{ http_host }}/prestashop"
-      tags: [ wordpress ]
+      tags: [ prestashop ]
 
     - name: Set ownership
       file:
@@ -144,15 +152,15 @@
         recurse: yes
         owner: www-data
         group: www-data
-      tags: [ wordpress ]
+      tags: [ prestashop ]
 
     - name: Set permissions for directories
       shell: "/usr/bin/find /var/www/{{ http_host }}/prestashop/ -type d -exec chmod 750 {} \\;"
-      tags: [ wordpress ]
+      tags: [ prestashop ]
 
     - name: Set permissions for files
       shell: "/usr/bin/find /var/www/{{ http_host }}/prestashop/ -type f -exec chmod 640 {} \\;"
-      tags: [ wordpress ]
+      tags: [ prestashop ]
 
   handlers:
     - name: Reload Apache
